@@ -1,0 +1,102 @@
+<Html>
+<head>
+    <meta charset="utf-8">
+</head>
+<style>
+    h1{
+        text-align: center;}
+    .loginForm{
+        text-align: center;
+    }
+</style>
+<body>
+<h1>注册/登录</h1>
+<form class="loginForm">
+    <div>
+        <div>
+            <span>姓名:</span>
+            <span><input id="name" type="text"  name="name"></span>
+        </div><br>
+        <div>
+            <span>密码:</span>
+            <span><input id="pwd" type="password"  name="pwd"></span>
+        </div><br>
+        <div><button id="reg">注册</button><button id="login">登录</button></div>
+    </div>
+</form>
+
+
+<script>
+
+    function ajax(url, data) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('POST', url);
+        xhr.send(data);
+        xhr.onreadystatechange=function(e){
+            switch (this.readyState){
+//                case this.UNSENT:
+//                    console.log('UNSENT');
+//                    break;
+//                case this.OPEND:
+//                    console('OPEND');
+//                    break;
+//                case this.HEADERS_RECEIVED:
+//                    console.log('HEADERS_RECEIVED');
+//                    break;
+//                case this.LOADING:
+//                    console.log('LOADING');
+//                    break;
+                case this.DONE:
+                    console.log(e);
+                        var exit=e.target.response;
+                        if(exit=='0'){
+                            alert('用户不存在');
+                        }else if(exit=='2'){
+                            alert("密码不正确");
+                        }else if(exit=='1'){
+                            window.location.href="./selfInfor.html";
+                        }
+                    break;
+            }
+        }
+
+    }
+
+    //拿到dom元素
+    var regBtn = document.querySelector('#reg');
+    var loginBtn = document.querySelector('#login');
+
+    var nameTxt = document.querySelector('#name');
+    var pwdTxt = document.querySelector('#pwd');
+
+    regBtn.addEventListener('click',function(e){
+        var name = nameTxt.value,
+                pwd = pwdTxt.value;
+
+        var data = {name:name,pwd:pwd};
+
+        data = JSON.stringify( data );
+
+        ajax('/suibian/reg',data);
+
+        //阻止默认事件
+        e.preventDefault();
+
+    });
+    loginBtn.addEventListener('click',function(e){
+        var name = nameTxt.value,
+                pwd = pwdTxt.value;
+        var data = {name:name,pwd:pwd};
+
+        data = JSON.stringify( data );
+
+        ajax('/suibian/login',data);
+
+
+        //阻止默认事件
+        e.preventDefault();
+    })
+</script>
+</body>
+</Html>
